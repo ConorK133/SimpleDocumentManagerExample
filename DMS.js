@@ -69,6 +69,8 @@ function EditDoc(docInfo)
 			DocList[index].groupCode = x.elements[1].value
 			DocList[index].docType = x.elements[2].value
 			DocList[index].docTitle = x.elements[3].value
+
+			x.reset();
 		}
 	}
 }
@@ -84,6 +86,7 @@ function PrepareDoc(){
 	doc.docTitle = x.elements[3].value;
 	doc.uploaded = x.elements[4].value;
    
+    x.reset();
     CreateDoc(doc);
 }
 

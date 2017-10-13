@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+	
+	<meta charset="utf-8">
+	<title>DMS</title>
+	<style type="text/css">
+		@import url("./index.css");
+	</style>
+</head>
+
+<body>
+	<script src="DMS.js"></script>
+
+	<div id="createModal" class="modal">
+	
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <span class="close">x</span>
+	      <h2>Create New Document</h2>
+	    </div>
+	    <div class="modal-body">
+	      <form id="my_form" action="/createDoc" method="post">
+			<select name="projectCode">
+				<option selected disabled>Project Code</option>
+			    <option value="ABC">ABC</option>
+			    <option value="XYZ">XYZ</option>
+			    <option value="123">123</option>
+		  	</select>
+			<select name="groupCode">
+				<option selected disabled>Group Code</option>
+			    <option value="G1G">G1G</option>
+			    <option value="G2G">G2G</option>
+			    <option value="G3G">G3G</option>
+		  	</select>			
+		  	<select name="docType">
+				<option selected disabled>Document Type</option>
+			    <option value="TXT">TXT</option>
+			    <option value="PDF">PDF</option>
+			    <option value="IMG">IMG</option>
+		  	</select>
+			<div class="group">     
+	            <input name="title" type="text" placeholder="Document Title" required>
+	        </div>
+	        <div class="group">         
+	            <input type="checkbox" name="uploaded" value="true" checked>Upload Now<br>
+	        </div>
+			<br>
+			
+				<div href="javascript:{}" id="notedit" onclick="toSubmit(this.id)" class="btn">Create Document</div>
+			
+			<br>
+		</form>
+	    </div>
+	  </div>
+	
+	</div>
+	
+	<div class="container">
+		<div class="header">
+		
+			
+			
+		    <nav>
+		    	<a id="admin" class="nava" >Enable Admin</a>
+		    	<a id="modal-log" class="nava" >Create New Document</a>
+		        
+		    </nav>
+		  		</div>
+		<div class="content" id="documentHolder">
+		<form id="sort_form" method="post">
+			<select name="sort" onchange="startSort()">
+				<option selected disabled>Sort By:</option>
+				<option value="docTitle">Title</option>
+			    <option value="projectCode">Project Code</option>
+			    <option value="groupCode">Group Code</option>
+			    <option value="docType">Type</option>
+			    <option value="docNumber">Document Number</option>
+			    <option value="docCreator">Creator</option>
+			    <option value="docDate">Date Created</option>
+		  	</select>
+		  	</form>
+		   <div class="lobby-message">
+		   	Title    |    Project Code    |    Group Code    |    Type    |    Document Number    |    Creator     |    Date Created 
+		   	<br></br>
+		   	<div id="doc-holder">
+		   	</div>
+		   </div>		   
+		        
+		   
+		</div>
+	</div>
+	<script type>printdocs()</script>
+	<script>
+		var modal = document.getElementById('createModal');
+		
+		var btn = document.getElementById("modal-log");
+		var btn2 = document.getElementById("admin");
+		
+		var span = document.getElementsByClassName("close")[0];
+		btn.onclick = function() {
+		    modal.style.display = "block";
+		}
+
+		btn2.onclick = function() {
+			var admin = SwitchAdmin();
+			if (admin) {
+				btn2.innerHTML = "Disable Admin"
+			}
+			else
+			{
+				btn2.innerHTML = "Enable Admin"
+			}
+		}
+		
+		span.onclick = function() {
+		    modal.style.display = "none";
+		}
+
+		window.onclick = function(event) {
+		    if (event.target == modal) {
+		        modal.style.display = "none";
+		    }
+		}
+
+		function toSubmit(elmID)
+		{
+			var x = document.getElementById("my_form");
+			if (x.elements[3].value == "") {
+				alert("You need to enter all information before submitting");
+			}
+			else {
+				if (elmID === "notedit") {
+					modal.style.display = "none";
+					PrepareDoc()
+					appendNewDoc(0, true);
+				}
+				else {
+					EditDoc(elmID);
+					document.getElementById(elmID).setAttribute('id', "notedit");
+					modal.style.display = "none";
+					document.getElementById("doc-holder").innerHTML = "";
+					printdocs();
+				}
+			}
+		}
+
+		function startSort()
+		{
+			var x = document.getElementById("sort_form");
+			document.getElementById("doc-holder").innerHTML = "";
+			SortDocs(x.elements[0].value, 1)
+			printdocs();
+		}
+	</script>
+
+</body>
+</html>
